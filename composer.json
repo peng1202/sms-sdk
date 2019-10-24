@@ -1,0 +1,29 @@
+{
+    "name": "peng/ali-smscode",
+    "description": "Send alicloud verification code",
+    "type": "library",
+    "keywords": [
+        "php",
+        "smscode",
+	    "laravel",
+	    "aliyun"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "zhangpeng",
+            "email": "964750656@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aliyun\\": "lib/",
+	    "Sms\\":"src/"
+        }
+    }
+}
+
