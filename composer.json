@@ -22,7 +22,17 @@
     "autoload": {
         "psr-4": {
             "Aliyun\\": "lib/",
-	    "Sms\\":"src/"
+	        "Sms\\":"src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sms\\SmsServiceProvider"
+            ],
+            "aliases": {
+                "AliSms": "Sms\\AliSms"
+            }
         }
     }
 }

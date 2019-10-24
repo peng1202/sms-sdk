@@ -1,10 +1,10 @@
 <?php
 
-namespace Mrgoon\AliSms;
+namespace Sms;
 
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
-class ServiceProvider extends LaravelServiceProvider
+class SmsServiceProvider extends LaravelServiceProvider
 {
     public function boot()
     {
