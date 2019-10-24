@@ -1,5 +1,5 @@
 {
-    "name": "peng/ali-smscode",
+    "name": "pengpeng/ali-smscode",
     "description": "Send alicloud verification code",
     "type": "library",
     "keywords": [
