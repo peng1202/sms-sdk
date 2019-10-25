@@ -21,19 +21,22 @@ Config::load();
 Class AliSms
 {
 
-    static $acsClient = null;
-    static $access_key = '';
-    static $access_secret = '';
-    static $sign_name = '';
-    static $code_template_id = '';
+    protected $acsClient = null;
 
+    public function __construct($access_key, $access_secret, $sign_name, $code_template_id)
+    {
+        $this->access_key = $access_key;
+        $this->access_secret = $access_secret;
+        $this->sign_name = $sign_name;
+        $this->code_template_id = $code_template_id;
+    }
 
     /**
      * 取得AcsClient
      *
      * @return DefaultAcsClient
      */
-    public static function getAcsClient() 
+    public function getAcsClient() 
     {
         //产品名称:云通信短信服务API产品,开发者无需替换
         $product = "Dysmsapi";
@@ -43,9 +46,9 @@ Class AliSms
 
         // TODO 此处需要替换成开发者自己的AK (https://ak-console.aliyun.com/)
         // $accessKeyId = config('alisms.access_key'); // AccessKeyId
-        $accessKeyId = self::$access_key; // AccessKeyId
+        $accessKeyId = $this->access_key; // AccessKeyId
         // $accessKeySecret = config('alisms.access_secret'); // AccessKeySecret
-        $accessKeySecret = self::$access_secret;
+        $accessKeySecret = $this->access_secret;
 
         // 暂时不支持多Region
         $region = "cn-hangzhou";
@@ -54,7 +57,7 @@ Class AliSms
         $endPointName = "cn-hangzhou";
 
 
-        if(static::$acsClient == null) {
+        if($this->acsClient == null) {
 
             //初始化acsClient,暂不支持region化
             $profile = DefaultProfile::getProfile($region, $accessKeyId, $accessKeySecret);
@@ -62,16 +65,16 @@ Class AliSms
             DefaultProfile::addEndpoint($endPointName, $region, $product, $domain);
 
             // 初始化AcsClient用于发起请求
-            static::$acsClient = new DefaultAcsClient($profile);
+            $this->acsClient = new DefaultAcsClient($profile);
         }
-        return static::$acsClient;
+        return $this->acsClient;
     }
 
     /**
      * 发送短信
      * @return stdClass
      */
-    public static function sendSms($phone, $code) 
+    public  function sendSms($phone, $code) 
     {
         // 初始化SendSmsRequest实例用于设置发送短信的参数
         $request = new SendSmsRequest();
@@ -83,11 +86,11 @@ Class AliSms
         $request->setPhoneNumbers($phone);
         // 必填，设置签名名称，应严格按"签名名称"填写，请参考: https://dysms.console.aliyun.com/dysms.htm#/develop/sign
         // $request->setSignName(config('alisms.sign_name'));
-        $request->setSignName(self::$sign_name);
+        $request->setSignName($this->sign_name);
 
         // 必填，设置模板CODE，应严格按"模板CODE"填写, 请参考: https://dysms.console.aliyun.com/dysms.htm#/develop/template
         // $request->setTemplateCode(config('alisms.code_template_id'));
-        $request->setTemplateCode(self::$code_template_id);
+        $request->setTemplateCode($this->code_template_id);
 
         // 可选，设置模板参数, 假如模板中存在变量需要替换则为必填项
         $request->setTemplateParam(json_encode(array(  // 短信模板中字段的值
@@ -101,11 +104,11 @@ Class AliSms
 //        $request->setSmsUpExtendCode("1234567");
 
         // 发起访问请求
-        $acsResponse = static::getAcsClient()->getAcsResponse($request);
+        $acsResponse = $this->getAcsClient()->getAcsResponse($request);
         return json_encode($acsResponse,true);
     }
 
-    public static function sendNotice($phone, $TemplateParam) {
+    public function sendNotice($phone, $TemplateParam) {
 
         // 初始化SendSmsRequest实例用于设置发送短信的参数
         $request = new SendSmsRequest();
@@ -115,11 +118,11 @@ Class AliSms
 
         // 必填，设置签名名称，应严格按"签名名称"填写，请参考: https://dysms.console.aliyun.com/dysms.htm#/develop/sign
         // $request->setSignName(config('alisms.sign_name'));
-        $request->setSignName(self::$sign_name);
+        $request->setSignName($this->sign_name);
 
         // 必填，设置模板CODE，应严格按"模板CODE"填写, 请参考: https://dysms.console.aliyun.com/dysms.htm#/develop/template
         // $request->setTemplateCode(config('alisms.code_template_id'));
-        $request->setTemplateCode(self::$code_template_id);
+        $request->setTemplateCode($this->code_template_id);
 
         // 可选，设置模板参数, 假如模板中存在变量需要替换则为必填项
         $request->setTemplateParam(json_encode($TemplateParam
@@ -132,7 +135,7 @@ Class AliSms
         // $request->setSmsUpExtendCode("1234567");
 
         // 发起访问请求
-        $acsResponse = static::getAcsClient()->getAcsResponse($request);
+        $acsResponse = $this->getAcsClient()->getAcsResponse($request);
 
         return json_encode($acsResponse,true);
     }
